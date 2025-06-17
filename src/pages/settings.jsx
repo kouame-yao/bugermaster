@@ -46,6 +46,7 @@ const iconMap = {
 };
 function Settings() {
   const router = useRouter();
+
   const { user, loading } = useAuth();
   const uid = user?.uid;
   const [OpenModale, setOpenModale] = useState(false);
@@ -97,8 +98,6 @@ function Settings() {
   // déconnexion
 
   const logout = async () => {
-    const router = useRouter();
-
     const response = await fetch(`${url}/api/deconnect/logout`);
     if (response.ok) {
       alert("Vous êtes déconnecté");
@@ -230,8 +229,8 @@ function Settings() {
   }, [soldeRestant]);
   if (loading)
     return (
-      <div class="fixed inset-0 bg-white bg-opacity-80 z-50 flex items-center justify-center">
-        <div class="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      <div className="fixed inset-0 bg-white bg-opacity-80 z-50 flex items-center justify-center">
+        <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   if (!user) {
