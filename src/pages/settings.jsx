@@ -95,22 +95,17 @@ function Settings() {
   }, [uid]);
 
   // déconnexion
+
   const logout = async () => {
-    const response = await fetch("/api/deconnect/logout", {
-      method: "GET",
-      credentials: "include", // Très important !
-    });
+    const router = useRouter();
 
+    const response = await fetch("/api/logout");
     if (response.ok) {
-      // Nettoyage local si tu stockes des infos
-      localStorage.clear();
-      sessionStorage.clear();
-
-      // Redirection + reload pour forcer la mise à jour de l'état
-      router.push("/");
-      window.location.reload();
+      alert("Vous êtes déconnecté");
+      // Utiliser replace() pour éviter que l'utilisateur puisse revenir à la page protégée
+      router.replace("/");
     } else {
-      alert("Erreur lors de la déconnexion.");
+      alert("Erreur lors de la déconnexion");
     }
   };
 
