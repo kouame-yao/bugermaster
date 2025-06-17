@@ -14,7 +14,6 @@ import { useRouter } from "next/navigation"; // ✅ App Router
 import { useEffect, useState } from "react";
 import NouvelleDepense from "../../components/NouvelleDepense";
 import Wrapper from "../../components/Wrapper";
-import { useAuth } from "../../context/AuthContext";
 
 const SoldeDonutChart = dynamic(
   () => import("../../components/SoldeDonutChart"),
