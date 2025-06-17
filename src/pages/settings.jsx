@@ -99,7 +99,7 @@ function Settings() {
   const logout = async () => {
     const router = useRouter();
 
-    const response = await fetch("/api/deconnect/logout");
+    const response = await fetch(`${url}/api/deconnect/logout`);
     if (response.ok) {
       alert("Vous êtes déconnecté");
       // Utiliser replace() pour éviter que l'utilisateur puisse revenir à la page protégée
