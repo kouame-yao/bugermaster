@@ -32,7 +32,7 @@ export default function RechercheTransaction({ close }) {
       });
       const data = await r.json();
 
-      setGetdev(data?.data || []);
+      setGetdev(data?.data || {});
     }
     getDevise();
   }, [uid]);

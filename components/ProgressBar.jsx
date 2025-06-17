@@ -21,7 +21,7 @@ const ProgressBar = ({ depense, total }) => {
       });
       const data = await r.json();
 
-      setGetdev(data?.data || []);
+      setGetdev(data?.data || {});
     }
     getDevise();
   }, [uid, url]);

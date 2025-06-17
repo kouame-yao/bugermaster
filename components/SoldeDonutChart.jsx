@@ -23,7 +23,7 @@ const SoldeDonutChart = ({ total, depense }) => {
       });
       const data = await r.json();
 
-      setGetdev(data?.data || []);
+      setGetdev(data?.data || {});
     }
     getDevise();
   }, [uid, url]);

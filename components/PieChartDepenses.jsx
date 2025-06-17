@@ -19,7 +19,7 @@ const DonutChartMobileFriendly = ({ data }) => {
         body: JSON.stringify({ uid }),
       });
       const data = await r.json();
-      setGetdev(data?.data || []);
+      setGetdev(data?.data || {});
     }
     getDevise();
   }, [uid, url]);

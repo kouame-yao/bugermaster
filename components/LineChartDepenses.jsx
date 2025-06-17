@@ -30,7 +30,7 @@ const CustomTooltip = ({ active, payload, label }) => {
           body: JSON.stringify({ uid: uid }),
         });
         const data = await r.json();
-        setGetdev(data?.data || []);
+        setGetdev(data?.data || {});
       } catch (error) {
         console.error("Erreur lors de la récupération de la devise:", error);
       }
