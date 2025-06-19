@@ -73,8 +73,6 @@ function Settings() {
         if (res.ok) {
           setUsers(data?.user.user);
 
-          console.log("ussss", data?.user.user);
-
           // { uid, email, ... }
         } else {
           setUsers(null);
@@ -305,14 +303,14 @@ function Settings() {
           <div className="flex gap-4">
             <div className="bg-blue-200 w-20 h-20 grid items-center justify-center rounded-full">
               <span className="text-2xl text-blue-600 font-bold">
-                {dataUser.displayName[0]}
-                {dataUser.displayName[9]}
+                {dataUser?.displayName?.charAt(0)}
+                {dataUser?.displayName?.charAt(9)}
               </span>
             </div>
 
             <div className="flex flex-col gap-4">
-              <strong>{dataUser.displayName} </strong>
-              <span>{dataUser.email}</span>
+              <strong>{dataUser?.displayName ?? 0} </strong>
+              <span>{dataUser?.email ?? 0}</span>
             </div>
           </div>
           <div
@@ -337,7 +335,7 @@ function Settings() {
               </span>
             </div>
             <input
-              value={dataUser.soldeglobal ?? 0}
+              value={dataUser?.soldeglobal ?? 0}
               type="range"
               step={1000}
               min={0}
