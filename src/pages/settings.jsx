@@ -111,40 +111,41 @@ function Settings() {
 
   // récupération des données des utilisateurs
   useEffect(() => {
-    async function GetUID() {
-      if (!uid) return;
-      const r = await fetch(`${url}/api/userProfil/user`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ uid }),
-      });
-      const data = await r.json();
-
-      setsoldeRestant(data?.data?.newCat);
-
-      setdataUser(data?.data);
-      setCategorie(data?.data?.categorie);
-    }
-    GetUID();
-
-    // récupère devise
-    async function getDevise() {
-      if (!uid) return;
-      const r = await fetch(`${url}/api/devise/getdevise`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ uid }),
-      });
-      const data = await r.json();
-
-      setGetdev(data?.data || []);
-    }
     getDevise();
+    GetUID();
   }, [uid]);
+
+  async function GetUID() {
+    if (!uid) return;
+    const r = await fetch(`${url}/api/userProfil/user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ uid }),
+    });
+    const data = await r.json();
+
+    setsoldeRestant(data?.data?.newCat);
+
+    setdataUser(data?.data);
+    setCategorie(data?.data?.categorie);
+  }
+
+  // récupère devise
+  async function getDevise() {
+    if (!uid) return;
+    const r = await fetch(`${url}/api/devise/getdevise`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ uid }),
+    });
+    const data = await r.json();
+
+    setGetdev(data?.data || []);
+  }
 
   // déconnexion
 
@@ -189,28 +190,39 @@ function Settings() {
     });
 
     const data = await r.json();
+
+    // Recharge pour refléter les données du serveur
+    GetUID();
   };
 
   // Solde Globale
   const handleChangeSoldeGlobale = async (val) => {
-    const nombreCategorie = Object.keys(categorie || {}).length;
+    if (!uid) return;
 
-    const ValeurParCategorie = Math.floor(val / nombreCategorie);
+    // Sécurisation des catégories
+    const entries = Object.entries(categorie || {}).filter(
+      ([key]) => key && key !== "undefined"
+    );
 
+    const nombreCategorie = entries.length;
+    if (nombreCategorie === 0) return;
+
+    const valeurParCategorie = Math.floor(val / nombreCategorie);
     const newCategorie = {};
 
-    for (const key of Object.keys(categorie || {})) {
-      newCategorie[key] = ValeurParCategorie;
+    for (const [key] of entries) {
+      newCategorie[key] = valeurParCategorie;
     }
 
-    setCategorie(newCategorie || {});
+    const somme = Object.values(newCategorie).reduce((acc, v) => acc + v, 0);
 
+    setCategorie(newCategorie);
     setdataUser((prev) => ({
       ...prev,
-      soldeglobal: Number(val),
+      soldeglobal: somme,
     }));
 
-    await fetch(`${url}/api/solde/editesoldeuncoup`, {
+    const res = await fetch(`${url}/api/solde/editesoldeuncoup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -221,17 +233,12 @@ function Settings() {
       }),
     });
 
-    const response = await fetch(`${url}/api/solde/editesoldeglobal`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        uid,
-        value: val,
-      }),
-    });
-    const data = await response.json();
+    if (!res.ok) {
+      const data = await res.json();
+      console.error("Erreur côté serveur:", data.message);
+      return;
+    }
+    GetUID();
   };
 
   // ajouter devise
@@ -298,7 +305,10 @@ function Settings() {
         <section className="bg-white py-4 px-3 space-y-4 rounded-md">
           <div className="flex gap-4">
             <div className="bg-blue-200 w-20 h-20 grid items-center justify-center rounded-full">
-              <span className="text-2xl text-blue-600 font-bold">MS</span>
+              <span className="text-2xl text-blue-600 font-bold">
+                {dataUser.displayName[0]}
+                {dataUser.displayName[9]}
+              </span>
             </div>
 
             <div className="flex flex-col gap-4">

@@ -81,7 +81,6 @@ export default function RechercheTransaction({ close }) {
       });
 
       const data = await r.json();
-      console.log("Historique reçu :", data?.depense);
 
       const details = Array.isArray(data?.depense)
         ? data.depense[0]?.details
@@ -173,7 +172,7 @@ export default function RechercheTransaction({ close }) {
         </div>
       </section>
 
-      <section>
+      <section className="w-full h-150 overflow-auto">
         {afficherResultats ? (
           resultatsFiltres.length > 0 ? (
             resultatsFiltres.reverse().map((item, index) => (

@@ -18,6 +18,10 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: "Tous les champs sont requis." });
   }
 
+  if (!value) {
+    return res.status(405).json({ message: "Montant manquant !" });
+  }
+
   try {
     const docRef = db.collection("users").doc(uid);
     const userSnap = await docRef.get();
@@ -220,7 +224,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       message: `Dépense enregistrée reste:${nouveauSolde} , notif:${alerts.length}`,
-      reste: nouveauSolde,
+      reste: nouveauSolde.toLocaleString("fr-FR"),
       mois: date,
       alertesEnvoyees: alerts.length,
     });

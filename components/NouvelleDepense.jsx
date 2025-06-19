@@ -70,9 +70,11 @@ export default function NouvelleDepense({ closeModale }) {
         setspiner(false);
         toast.success(data.message);
       } else {
+        setspiner(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setspiner(false);
       toast.error("Erreur lors de l'enregistrement");
       console.error(error);
     }
@@ -130,7 +132,7 @@ export default function NouvelleDepense({ closeModale }) {
         <span>Nouvelle dépense</span>
         <span
           onClick={handleSubmite}
-          className="cursor-pointer bg-violet-300 px-3 rounded-md hover:bg-violet-100 shadow p-1 text-violet-600"
+          className="cursor-pointer bg-violet-300 px-3 rounded-md active:bg-violet-100 shadow p-1 text-violet-600"
         >
           Enregistrer
         </span>
