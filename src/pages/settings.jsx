@@ -1,6 +1,5 @@
 import {
   BusFront,
-  ChevronDown,
   ChevronRight,
   Download,
   FileText,
@@ -435,10 +434,7 @@ function Settings() {
                 }}
                 className="outline-none shadow bg-gray-300 rounded-md max-w-4"
               >
-                <option value="">
-                  {" "}
-                  <ChevronDown />{" "}
-                </option>
+                <option value=""> devise </option>
                 <option value="€">EURO (€)</option>
                 <option value="CFA">CFA (₣)</option>
               </select>
