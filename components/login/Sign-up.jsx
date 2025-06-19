@@ -18,6 +18,7 @@ export default function Sign_up() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          user: user,
           uid: user.uid,
           email: user.email,
           displayName: user.displayName,

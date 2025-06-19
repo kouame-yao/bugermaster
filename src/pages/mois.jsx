@@ -308,6 +308,7 @@ function mois() {
               .filter((item) =>
                 item.categorie.toLowerCase().includes(valueRecher.toLowerCase())
               )
+              .reverse()
               .map((item, index) => (
                 <div
                   key={index}

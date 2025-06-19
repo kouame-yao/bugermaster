@@ -72,7 +72,6 @@ function Alerts() {
       }
 
       const succes = await response.json();
-      console.log(succes);
 
       setAlertes((prev) => prev.filter((notif) => notif.id !== id));
       setActiveId((currentActiveId) =>
@@ -135,51 +134,54 @@ function Alerts() {
             <div className="flex flex-col gap-3">
               {Alertes?.filter((item) =>
                 item.type.toLowerCase().includes(Element.toLowerCase())
-              ).map((item) => {
-                const vue = item.read === false ? "bg-blue-100" : "bg-gray-100";
-                const icone =
-                  item.type === "statistique" ? (
-                    <AlertTriangleIcon className="bg-orange-500 rounded-full text-orange-100" />
-                  ) : item.type === "alerte" ? (
-                    <AlertCircleIcon className="bg-red-500 rounded-full text-red-100" />
-                  ) : item.type === "rappel" ? (
-                    <AlertCircleIcon className="bg-blue-500 rounded-full text-blue-100" />
-                  ) : (
-                    0
-                  );
+              )
+                .reverse()
+                .map((item) => {
+                  const vue =
+                    item.read === false ? "bg-blue-100" : "bg-gray-100";
+                  const icone =
+                    item.type === "statistique" ? (
+                      <AlertTriangleIcon className="bg-orange-500 rounded-full text-orange-100" />
+                    ) : item.type === "alerte" ? (
+                      <AlertCircleIcon className="bg-red-500 rounded-full text-red-100" />
+                    ) : item.type === "rappel" ? (
+                      <AlertCircleIcon className="bg-blue-500 rounded-full text-blue-100" />
+                    ) : (
+                      0
+                    );
 
-                const isActive = activeId === item.id;
+                  const isActive = activeId === item.id;
 
-                return (
-                  <div
-                    key={item.id}
-                    className={`relative cursor-pointer flex py-2 gap-2 px-3 rounded-sm ${vue}`}
-                    onClick={() => setActiveId(isActive ? null : item.id)}
-                    style={{ userSelect: "none" }}
-                  >
-                    {icone}
-                    <div className="flex flex-col gap-4">
-                      <strong>{item.title} </strong>
-                      <span>{item.message}</span>
-                      <span>{item.createdAt}</span>
-                    </div>
-
-                    {/* Div Supprimer en position absolute à droite */}
-                    {isActive && (
-                      <div
-                        className="absolute right-0 top-0 bottom-0 flex items-center px-2 bg-red-500 rounded-md shadow text-white rounded-l cursor-pointer"
-                        onClick={(e) => {
-                          e.stopPropagation(); // empêche la propagation du clic vers la notification
-                          handleDelete(item.id);
-                        }}
-                        style={{ width: 90 }}
-                      >
-                        Supprimer
+                  return (
+                    <div
+                      key={item.id}
+                      className={`relative cursor-pointer flex py-2 gap-2 px-3 rounded-sm ${vue}`}
+                      onClick={() => setActiveId(isActive ? null : item.id)}
+                      style={{ userSelect: "none" }}
+                    >
+                      {icone}
+                      <div className="flex flex-col gap-4">
+                        <strong>{item.title} </strong>
+                        <span>{item.message}</span>
+                        <span>{item.createdAt}</span>
                       </div>
-                    )}
-                  </div>
-                );
-              })}
+
+                      {/* Div Supprimer en position absolute à droite */}
+                      {isActive && (
+                        <div
+                          className="absolute right-0 top-0 bottom-0 flex items-center px-2 bg-red-500 rounded-md shadow text-white rounded-l cursor-pointer"
+                          onClick={(e) => {
+                            e.stopPropagation(); // empêche la propagation du clic vers la notification
+                            handleDelete(item.id);
+                          }}
+                          style={{ width: 90 }}
+                        >
+                          Supprimer
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </section>

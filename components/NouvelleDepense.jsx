@@ -1,5 +1,4 @@
 import {
-  AlertCircle,
   BusFront,
   FileText,
   Film,
@@ -9,6 +8,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { SyncLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 
@@ -18,6 +18,7 @@ export default function NouvelleDepense({ closeModale }) {
   const [isActive, setIsactive] = useState(false);
   const [dataUser, setdataUser] = useState([]);
   const [categorie, setCategorie] = useState(0);
+  const [spiner, setspiner] = useState(false);
 
   const [value, setValue] = useState({
     montant: "",
@@ -42,6 +43,7 @@ export default function NouvelleDepense({ closeModale }) {
   };
 
   const handleSubmite = async () => {
+    setspiner(true);
     if (!uid) return;
     const body = {
       uid: uid,
@@ -65,6 +67,7 @@ export default function NouvelleDepense({ closeModale }) {
           date: "",
           description: "",
         });
+        setspiner(false);
         toast.success(data.message);
       } else {
         toast.error(data.message);
@@ -127,7 +130,7 @@ export default function NouvelleDepense({ closeModale }) {
         <span>Nouvelle dépense</span>
         <span
           onClick={handleSubmite}
-          className="cursor-pointer text-violet-600"
+          className="cursor-pointer bg-violet-300 px-3 rounded-md hover:bg-violet-100 shadow p-1 text-violet-600"
         >
           Enregistrer
         </span>
@@ -205,7 +208,7 @@ export default function NouvelleDepense({ closeModale }) {
           </div>
         </section>
 
-        <section>
+        {/* <section>
           <div className="flex gap-2 bg-blue-100 text-blue-700 px-3 py-4 rounded-md">
             <span>
               <AlertCircle />
@@ -223,7 +226,15 @@ export default function NouvelleDepense({ closeModale }) {
               </span>
             </div>
           </div>
-        </section>
+        </section> */}
+
+        {spiner && (
+          <div className="fixed inset-0 z-50 bg-black opacity-50  w-full grid justify-center items-center">
+            <div>
+              <SyncLoader color="blue" />
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

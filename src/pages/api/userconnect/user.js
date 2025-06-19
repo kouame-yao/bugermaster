@@ -9,9 +9,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Méthode non autorisée" });
   }
 
-  const { uid, email, displayName } = req.body; // Tu passes ces infos depuis le client
+  const { uid, email, displayName, user } = req.body; // Tu passes ces infos depuis le client
 
-  if (!uid || !email || !displayName) {
+  if (!uid || !email || !displayName || !user) {
     return res.status(400).json({ message: "Informations manquantes" });
   }
 
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
     );
   }
   // Crée le JWT
-  const token = jwt.sign({ uid, email }, SECRET_KEY, {
+  const token = jwt.sign({ uid, email, user }, SECRET_KEY, {
     expiresIn: "5d",
   });
 

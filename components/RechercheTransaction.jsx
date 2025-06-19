@@ -1,8 +1,39 @@
-import { ArrowLeft, Dot, Search, Utensils } from "lucide-react";
+import {
+  ArrowLeft,
+  BusFront,
+  Dot,
+  FileText,
+  Film,
+  HeartPlus,
+  Search,
+  ShoppingBag,
+  Utensils,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 const url = process.env.NEXT_PUBLIC_LOCAL;
+
+const iconMap = {
+  Alimentation: (
+    <Utensils className="w-10 h-10 p-2 text-sm text-orange-200 bg-orange-400 rounded-full" />
+  ),
+  Transport: (
+    <BusFront className="w-10 h-10 p-2 rounded-full text-blue-200 bg-blue-400  " />
+  ),
+  Shopping: (
+    <ShoppingBag className="w-10 h-10 p-2 text-green-400 bg-green-200 rounded-full" />
+  ),
+  Sante: (
+    <HeartPlus className="w-10 h-10 p-2  text-red-500 bg-red-200 rounded-full" />
+  ),
+  Loisir: (
+    <Film className="w-10 h-10 p-2 text-purple-500 bg-purple-200 rounded-full" />
+  ),
+  Facture: (
+    <FileText className="w-10 h-10 p-2 rounded-full  text-green-600 bg-green-300" />
+  ),
+};
 
 export default function RechercheTransaction({ close }) {
   const { user, loading } = useAuth();
@@ -145,13 +176,13 @@ export default function RechercheTransaction({ close }) {
       <section>
         {afficherResultats ? (
           resultatsFiltres.length > 0 ? (
-            resultatsFiltres.map((item, index) => (
+            resultatsFiltres.reverse().map((item, index) => (
               <div
                 key={index}
                 className="flex justify-between items-center border-b border-gray-400 py-1 px-3"
               >
                 <div className="flex gap-4 items-center">
-                  <Utensils className="bg-orange-300 p-2 text-orange-700 w-10 h-10 rounded-full" />
+                  {iconMap[item.categorie]}
                   <div className="grid space-y-4">
                     <strong>{item.description}</strong>
                     <div className="flex text-sm text-gray-400">

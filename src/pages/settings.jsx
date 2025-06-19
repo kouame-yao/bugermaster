@@ -1,5 +1,6 @@
 import {
   BusFront,
+  ChevronDown,
   ChevronRight,
   Download,
   FileText,
@@ -44,6 +45,7 @@ const iconMap = {
     <FileText className="w-10 h-10 p-2 rounded-full  text-green-600 bg-green-300" />
   ),
 };
+
 function Settings() {
   const router = useRouter();
 
@@ -55,8 +57,57 @@ function Settings() {
   const [valueOption, setValueOption] = useState("");
   const [getDev, setGetdev] = useState([]);
   const [openDialogue, setopenDialogue] = useState(false);
-  const [soldeRestant, setsoldeRestant] = useState([]);
-  const [valueCategorie, setValueCategorie] = useState({});
+  const [soldeRestant, setsoldeRestant] = useState({});
+  const [deleteProfil, setDeleteProfil] = useState(false);
+  const [users, setUsers] = useState(null);
+
+  // Supprimer utilisateur
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("/api/userconnect/recupeuser", {
+          method: "GET",
+          credentials: "include",
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          setUsers(data?.user.user);
+
+          console.log("ussss", data?.user.user);
+
+          // { uid, email, ... }
+        } else {
+          setUsers(null);
+        }
+      } catch (error) {
+        setUsers(null);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  async function deleteUSers() {
+    if (!users) {
+      return;
+    }
+    if (!uid) return;
+    const r = await fetch(`${url}/api/deleteprofil/supprimer`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ uid: uid }),
+    });
+    const data = await r.json();
+
+    if (r.ok) {
+      console.log(data.message);
+    } else {
+      console.log(data.message);
+    }
+  }
 
   // récupération des données des utilisateurs
   useEffect(() => {
@@ -219,10 +270,12 @@ function Settings() {
     }
   }
   useEffect(() => {
+    if (!soldeRestant || typeof soldeRestant !== "object") return;
+
     Object.entries(soldeRestant).forEach(([key, value]) => {
       if (value === 0) {
         toast.error(
-          `Le solde de la catégorie ${key}  est à 0 veillez alimenter le solde`
+          `Le solde de la catégorie ${key} est à 0, veillez alimenter le solde`
         );
       }
     });
@@ -370,9 +423,12 @@ function Settings() {
                       (prev) => ({ ...prev }, { devise: e.target.value })
                     );
                 }}
-                className="outline-none max-w-18"
+                className="outline-none shadow bg-gray-300 rounded-md max-w-4"
               >
-                <option value="">devise</option>
+                <option value="">
+                  {" "}
+                  <ChevronDown />{" "}
+                </option>
                 <option value="€">EURO (€)</option>
                 <option value="CFA">CFA (₣)</option>
               </select>
@@ -386,10 +442,13 @@ function Settings() {
         {/* Exportation */}
         <section className="bg-white px-3 py-3 rounded-md">
           <h1>Exportation des données</h1>
-          <div className="flex justify-between bg-gray-100 py-2 px-2 rounded-md mt-2">
+          <div
+            onClick={() => setDeleteProfil(true)}
+            className="flex justify-between bg-gray-100 py-2 px-2 rounded-md mt-2"
+          >
             <div className="flex gap-2">
               <Download />
-              <span>Exporter en PDF</span>
+              <span>Supprimer votre compte</span>
             </div>
             <ChevronRight />
           </div>
@@ -428,6 +487,7 @@ function Settings() {
           <span>© 2025 BudgetMaster. Tous droits réservés.</span>
         </div>
       </footer>
+      {/* supprimer donner */}
       {openDialogue && (
         <div className="fixed top-0 w-full h-full left-0 bottom-0 z-0 grid justify-center items-center">
           <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>{" "}
@@ -443,6 +503,33 @@ function Settings() {
               </button>
               <button
                 onClick={() => setopenDialogue(false)}
+                className="bg-gray-500 rounded-md px-2"
+              >
+                Non
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* supprimer le profil */}
+
+      {deleteProfil && (
+        <div className="fixed top-0 w-full h-full left-0 bottom-0 z-0 grid justify-center items-center">
+          <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>{" "}
+          {/* fond noir semi-transparent */}
+          <div className="relative z-10 bg-white rounded-md w-full indent-1 px-3 py-4 grid gap-2">
+            <div>Votre compte sera supprimer</div>
+            <div className="flex gap-4">
+              <button
+                onClick={() => {
+                  deleteUSers(), logout();
+                }}
+                className="bg-red-500 text-white rounded-md px-3"
+              >
+                Oui
+              </button>
+              <button
+                onClick={() => setDeleteProfil(false)}
                 className="bg-gray-500 rounded-md px-2"
               >
                 Non

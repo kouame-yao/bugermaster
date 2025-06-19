@@ -150,6 +150,8 @@ function Home() {
     window.location.reload();
   };
 
+  // console.log(hist.slice(-2));
+
   return (
     <div>
       <Wrapper>
@@ -191,7 +193,7 @@ function Home() {
                 <span onClick={() => router.push("/mois")}>Voir tout</span>
               </div>
               <div className="mt-5 overflow-hidden h-40">
-                {hist?.map((item, index) => (
+                {hist?.slice(-2).map((item, index) => (
                   <div
                     key={index}
                     className="flex justify-between items-center py-4 border-b border-gray-100"
